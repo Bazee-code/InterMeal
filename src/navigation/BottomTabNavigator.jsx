@@ -1,12 +1,14 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
-import DashboardScreen from '../screens/dashboard';
 import * as Routes from './routes';
-import InsightsScreen from '../screens/insights';
-import ProfileScreen from '../screens/profile';
-import TimerScreen from '../screens/timer';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  DashboardScreenStack,
+  InsightsScreenStack,
+  ProfileScreenStack,
+  TimerScreenStack,
+} from './StackNavigator';
 
 const BottomTab = createMaterialBottomTabNavigator();
 
@@ -15,12 +17,22 @@ const BottomTabNavigator = () => {
     <BottomTab.Navigator
       initialRouteName={Routes.DASHBOARD_SCREEN}
       activeColor="#e91e63"
-      barStyle={{backgroundColor: 'tomato'}}>
+      //   barStyle={{backgroundColor: 'tomato'}}
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#080416',
+          borderTopColor: '#080416',
+          borderWidth: 0,
+        },
+        tabBarActiveTintColor: '#FFF',
+        tabBarInactiveTintColor: '#A29BB1',
+        headerShown: false,
+      }}>
       <BottomTab.Screen
         name={Routes.DASHBOARD_SCREEN}
-        component={DashboardScreen}
+        component={DashboardScreenStack}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Dashboard',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
@@ -28,19 +40,9 @@ const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name={Routes.INSIGHTS_SCREEN}
-        component={InsightsScreen}
+        component={InsightsScreenStack}
         options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name={Routes.PROFILE_SCREEN}
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Timer',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
@@ -48,9 +50,19 @@ const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name={Routes.TIMER_SCREEN}
-        component={TimerScreen}
+        component={TimerScreenStack}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Timer',
+          tabBarIcon: ({color}) => (
+            <MaterialCommunityIcons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name={Routes.PROFILE_SCREEN}
+        component={ProfileScreenStack}
+        options={{
+          tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),

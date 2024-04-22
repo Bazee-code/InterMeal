@@ -1,14 +1,17 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import BottomTabNavigator from './src/navigation/bottomTabNavigator';
+import BottomTabNavigator from './src/navigation/BottomTabNavigator';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-const App = () => {
+const App = gestureHandlerRootHOC(() => {
   return (
     <NavigationContainer>
-      <BottomTabNavigator />
+      <SafeAreaProvider>
+        <BottomTabNavigator />
+      </SafeAreaProvider>
     </NavigationContainer>
   );
-};
+});
 
 export default App;
