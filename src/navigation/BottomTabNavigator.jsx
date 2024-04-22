@@ -1,6 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as Routes from './routes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -10,22 +11,20 @@ import {
   TimerScreenStack,
 } from './StackNavigator';
 
-const BottomTab = createMaterialBottomTabNavigator();
+const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
-      initialRouteName={Routes.DASHBOARD_SCREEN}
-      activeColor="#e91e63"
-      //   barStyle={{backgroundColor: 'tomato'}}
+      backBehavior="history"
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: '#080416',
+          backgroundColor: '#FFF',
           borderTopColor: '#080416',
           borderWidth: 0,
         },
-        tabBarActiveTintColor: '#FFF',
-        tabBarInactiveTintColor: '#A29BB1',
+        tabBarActiveTintColor: '#F97C00',
+        tabBarInactiveTintColor: '#707070',
         headerShown: false,
       }}>
       <BottomTab.Screen
