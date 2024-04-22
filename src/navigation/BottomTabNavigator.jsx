@@ -3,7 +3,7 @@ import React from 'react';
 import {createMaterialBottomTabNavigator} from 'react-native-paper/react-navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as Routes from './routes';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {
   DashboardScreenStack,
   InsightsScreenStack,
@@ -20,50 +20,48 @@ const BottomTabNavigator = () => {
       screenOptions={{
         tabBarStyle: {
           backgroundColor: '#FFF',
-          borderTopColor: '#080416',
-          borderWidth: 0,
         },
         tabBarActiveTintColor: '#F97C00',
         tabBarInactiveTintColor: '#707070',
         headerShown: false,
       }}>
       <BottomTab.Screen
-        name={Routes.DASHBOARD_SCREEN}
+        name={Routes.DASHBOARD_TAB}
         component={DashboardScreenStack}
         options={{
           tabBarLabel: 'Dashboard',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+          tabBarIcon: ({color, size}) => (
+            <Icon name="calendar" color={color} size={size} />
           ),
         }}
       />
       <BottomTab.Screen
-        name={Routes.INSIGHTS_SCREEN}
+        name={Routes.INSIGHTS_TAB}
         component={InsightsScreenStack}
         options={{
           tabBarLabel: 'Timer',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+          tabBarIcon: ({color, size}) => (
+            <Icon name="calendar" color={color} size={size} />
           ),
         }}
       />
       <BottomTab.Screen
-        name={Routes.TIMER_SCREEN}
+        name={Routes.TIMER_TAB}
         component={TimerScreenStack}
         options={{
           tabBarLabel: 'Timer',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+          tabBarIcon: ({color, size}) => (
+            <Icon name="calendar" color={color} size={size} />
           ),
         }}
       />
       <BottomTab.Screen
-        name={Routes.PROFILE_SCREEN}
+        name={Routes.PROFILE_TAB}
         component={ProfileScreenStack}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+          tabBarIcon: ({color, size}) => (
+            <Icon name="calendar" color={color} size={size} />
           ),
         }}
       />
