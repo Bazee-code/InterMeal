@@ -6,13 +6,15 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 const DashboardScreen = () => {
   return (
-    <SafeAreaView>
-      <ScrollView
-        contentContainerStyle={{margin: 10}}
-        showsVerticalScrollIndicator={false}>
-        <CardSection />
-        <InsightsSection />
-      </ScrollView>
+    <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
+      <View style={{backgroundColor: '#fb9f9f'}}>
+        <ScrollView
+          contentContainerStyle={{margin: 10}}
+          showsVerticalScrollIndicator={false}>
+          <CardSection />
+          <InsightsSection />
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

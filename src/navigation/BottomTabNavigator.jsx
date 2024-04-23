@@ -19,10 +19,10 @@ const BottomTabNavigator = () => {
       backBehavior="history"
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: '#FFF',
+          backgroundColor: '#fb9f9f',
         },
-        tabBarActiveTintColor: '#F97C00',
-        tabBarInactiveTintColor: '#707070',
+        tabBarActiveTintColor: '#000',
+        tabBarInactiveTintColor: '#fff',
         headerShown: false,
       }}>
       <BottomTab.Screen
