@@ -13,6 +13,5 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 30,
-    // alignItems: 'flex-end',
   },
 });

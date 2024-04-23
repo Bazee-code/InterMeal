@@ -1,7 +1,6 @@
-import {View, Text, SafeAreaView} from 'react-native';
+import {View, Text} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
-import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/FontAwesome6';
