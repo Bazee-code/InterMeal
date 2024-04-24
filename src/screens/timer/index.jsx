@@ -8,7 +8,9 @@ const TimerScreen = () => {
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
       <View style={{backgroundColor: '#fb9f9f'}}>
-        <ScrollView contentContainerStyle={{margin: 10}}>
+        <ScrollView
+          contentContainerStyle={{margin: 10}}
+          showsVerticalScrollIndicator={false}>
           <TimerSection />
           <TipsSection />
           <View style={{marginBottom: 30}} />

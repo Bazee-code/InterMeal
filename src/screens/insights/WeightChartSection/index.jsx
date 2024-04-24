@@ -2,16 +2,16 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 import {Button} from 'react-native-paper';
-import {LineChart} from 'react-native-chart-kit';
+import {LineChart, BarChart} from 'react-native-chart-kit';
 import {windowWidth} from '../../../utils';
 import Icon from 'react-native-vector-icons/Entypo';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 
-const ChartSection = () => {
+const WeightChartSection = () => {
   return (
     <View>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Fasting Tracker</Text>
+        <Text style={styles.title}>Weight Tracker</Text>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginRight: 5}}>
           <Icon
@@ -41,7 +41,7 @@ const ChartSection = () => {
           </Button>
         </View>
         <View>
-          <LineChart
+          <BarChart
             data={{
               labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
               datasets: [
@@ -82,4 +82,4 @@ const ChartSection = () => {
   );
 };
 
-export default ChartSection;
+export default WeightChartSection;
