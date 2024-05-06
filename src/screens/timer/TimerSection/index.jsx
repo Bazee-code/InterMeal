@@ -1,12 +1,20 @@
 import {View, Text} from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import {styles} from './styles';
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {windowWidth} from '../../../utils';
+import StopwatchTimer, {
+  StopwatchTimerMethods,
+} from 'react-native-animated-stopwatch-timer';
 
 const TimerSection = () => {
+  const stopwatchTimerRef = useRef(null);
+
+  const handlePlay = () => {
+    return stopwatchTimerRef.current?.play();
+  };
   return (
     <View>
       <View style={styles.titleContainer}>
@@ -16,6 +24,20 @@ const TimerSection = () => {
           <Icon name="edit" color="#F97C00" size={18} />
         </Button>
         <View style={{marginTop: 20}}>
+          {/* <View style={styles.timerContainer}> */}
+          {/* <Text style={[styles?.title, {fontSize: 30}]}>11:11:11</Text> */}
+          <StopwatchTimer
+            ref={stopwatchTimerRef}
+            mode="timer"
+            initialTimeInMs={3636200}
+            trailingZeros={2}
+            containerStyle={styles.timerContainer}
+            leadingZeros={1}
+            enterAnimationType="slide-in-down"
+            textCharStyle={[styles.title, {fontSize: 30, margin: 5}]}
+            decimalSeparator=":"
+          />
+          {/* </View> */}
           <AnimatedCircularProgress
             size={windowWidth * 0.83}
             width={40}
@@ -26,7 +48,8 @@ const TimerSection = () => {
           />
         </View>
         <Button
-          style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}>
+          style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
+          onPress={handlePlay}>
           <Text style={[styles.buttonText, {color: '#FFF'}]}>End fast</Text>
         </Button>
       </View>

@@ -1,12 +1,24 @@
-import {View, Text} from 'react-native';
-import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/FontAwesome6';
 import {Button, ProgressBar, MD3Colors} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import * as Routes from '../../../navigation/routes';
+import StopwatchTimer, {
+  StopwatchTimerMethods,
+} from 'react-native-animated-stopwatch-timer';
 
 const CardSection = () => {
+  const stopwatchTimerRef = useRef < StopwatchTimerMethods > null;
+
+  const navigation = useNavigation();
+
+  const handleStartFast = () => {
+    navigation.navigate(Routes.TIMER_TAB);
+  };
   return (
     <View>
       <Text style={styles.title}>Daily tasks</Text>
@@ -21,9 +33,9 @@ const CardSection = () => {
             />
             <Text style={styles.cardTitle}>Start fasting</Text>
           </View>
-          <Button style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleStartFast}>
             <Text style={styles.buttonText}>Start</Text>
-          </Button>
+          </TouchableOpacity>
         </View>
 
         <View style={[styles.cardContainer, {marginTop: 15}]}>
@@ -34,9 +46,9 @@ const CardSection = () => {
               <Text style={styles.cardSubTitle}>35 kcal burned</Text>
             </View>
           </View>
-          <Button style={styles.button}>
+          <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Start</Text>
-          </Button>
+          </TouchableOpacity>
         </View>
 
         <View style={[styles.cardContainer, {marginTop: 15}]}>

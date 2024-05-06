@@ -47,4 +47,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: windowWidth * 0.45,
   },
+  timerContainer: {
+    position: 'absolute',
+    top: '43%',
+    left: '20%',
+  },
 });
