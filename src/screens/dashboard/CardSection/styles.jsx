@@ -32,7 +32,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#191919',
-    paddingHorizontal: 5,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
     borderRadius: 10,
   },
   buttonText: {
