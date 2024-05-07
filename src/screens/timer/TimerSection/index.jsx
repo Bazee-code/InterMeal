@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {styles} from './styles';
 import {Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -11,10 +11,20 @@ import StopwatchTimer, {
 
 const TimerSection = () => {
   const stopwatchTimerRef = useRef(null);
+  const [startTimer, setStartTimer] = useState(false);
 
   const handlePlay = () => {
     return stopwatchTimerRef.current?.play();
   };
+
+  const handlePause = () => {
+    return stopwatchTimerRef.current?.pause();
+  };
+
+  const handleReset = () => {
+    return stopwatchTimerRef.current?.reset();
+  };
+
   return (
     <View>
       <View style={styles.titleContainer}>
