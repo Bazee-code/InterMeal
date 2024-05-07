@@ -50,6 +50,11 @@ export const styles = StyleSheet.create({
   timerContainer: {
     position: 'absolute',
     top: '43%',
+    left: '15%',
+  },
+  eatingContainer: {
+    position: 'absolute',
+    top: '43%',
     left: '17%',
   },
 });
