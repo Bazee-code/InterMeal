@@ -5,6 +5,7 @@ import DashboardScreen from '../screens/dashboard';
 import InsightsScreen from '../screens/insights';
 import ProfileScreen from '../screens/profile';
 import TimerScreen from '../screens/timer';
+import CompleteSection from '../screens/timer/CompleteSection';
 
 const DashboardStack = createNativeStackNavigator();
 const InsightsStack = createNativeStackNavigator();
@@ -58,7 +59,7 @@ export const TimerScreenStack = () => {
     <TimerStack.Navigator>
       <TimerStack.Screen
         name={Routes.TIMER_SCREEN}
-        component={TimerScreen}
+        component={CompleteSection}
         options={{
           headerShown: false,
         }}
