@@ -59,6 +59,13 @@ export const TimerScreenStack = () => {
     <TimerStack.Navigator>
       <TimerStack.Screen
         name={Routes.TIMER_SCREEN}
+        component={TimerScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <TimerStack.Screen
+        name={Routes.SUCCESS_SCREEN}
         component={CompleteSection}
         options={{
           headerShown: false,

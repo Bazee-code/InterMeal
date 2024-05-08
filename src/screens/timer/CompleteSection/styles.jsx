@@ -14,11 +14,17 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1b1b1b',
   },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: -140,
+  },
   detailContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     height: 70,
-    marginTop: 20,
+    marginTop: 10,
   },
   detailText: {
     color: '#959595',
@@ -56,7 +62,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 15,
+    marginVertical: 5,
   },
   emojiText: {
     color: '#191919',
@@ -76,6 +82,6 @@ export const styles = StyleSheet.create({
   footerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
   },
 });

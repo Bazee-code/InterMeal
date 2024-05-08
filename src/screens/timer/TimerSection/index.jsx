@@ -8,9 +8,12 @@ import {windowWidth} from '../../../utils';
 import StopwatchTimer, {
   StopwatchTimerMethods,
 } from 'react-native-animated-stopwatch-timer';
+import {useNavigation} from '@react-navigation/native';
+import * as Routes from '../../../navigation/routes';
 
 const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
   const stopwatchTimerRef = useRef(null);
+  const navigation = useNavigation();
 
   const handleConfirm = () =>
     Alert.alert('Confirm', 'Are you sure you want to end your fast?', [
@@ -28,6 +31,7 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
           handleTimeElapsed();
           handleReset();
           setStartTimer(false);
+          navigation.push(Routes.SUCCESS_SCREEN);
         },
       },
     ]);
