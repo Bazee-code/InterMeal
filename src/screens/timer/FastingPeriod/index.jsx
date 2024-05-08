@@ -4,11 +4,9 @@ import {styles} from './styles';
 import RadioGroup from 'react-native-radio-buttons-group';
 import {MMKV} from 'react-native-mmkv';
 
+const storage = new MMKV();
+
 const FastingPeriod = ({handleCloseSheet, fastingWindow, setFastingWindow}) => {
-  const [selectedId, setSelectedId] = useState();
-
-  const storage = new MMKV();
-
   const radioButtons = useMemo(
     () => [
       {
@@ -51,8 +49,6 @@ const FastingPeriod = ({handleCloseSheet, fastingWindow, setFastingWindow}) => {
   );
 
   const handleConfirm = () => {
-    storage.set('fastingWindow', fastingWindow);
-
     return Alert.alert(
       'Success',
       `Your fasting window has been set to ${fastingWindow} hours a day`,
@@ -60,7 +56,7 @@ const FastingPeriod = ({handleCloseSheet, fastingWindow, setFastingWindow}) => {
         {
           text: 'ok',
           onPress: () => {
-            console.log('ok pressed');
+            storage.set('fastingWindow', fastingWindow);
           },
         },
       ],

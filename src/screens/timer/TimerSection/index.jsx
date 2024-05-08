@@ -21,7 +21,18 @@ const TimerSection = ({
   const stopwatchTimerRef = useRef(null);
   const navigation = useNavigation();
 
-  console.log('fastingWindow', fastingWindow);
+  const handleTimeElapsed = () => {
+    const ms = stopwatchTimerRef.current?.getSnapshot();
+
+    let seconds = (ms / 1000).toFixed(1);
+    let minutes = (ms / (1000 * 60)).toFixed(1);
+    let hours = (ms / (1000 * 60 * 60)).toFixed(1);
+    let days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
+    if (seconds < 60) return seconds + ' Sec';
+    else if (minutes < 60) return minutes + ' Min';
+    else if (hours < 24) return hours + ' Hrs';
+    else return days + ' Days';
+  };
 
   const handleConfirm = () =>
     Alert.alert('Confirm', 'Are you sure you want to end your fast?', [
@@ -39,13 +50,13 @@ const TimerSection = ({
           handleTimeElapsed();
           handleReset();
           setStartTimer(false);
-          navigation.push(Routes.SUCCESS_SCREEN);
+          navigation.push(Routes.SUCCESS_SCREEN, {item: handleTimeElapsed()});
         },
       },
     ]);
 
   const handlePlay = () => {
-    if (cachedFastValue === undefined) {
+    if (fastingWindow == 0) {
       return Alert.alert('Error', 'Kindly select a fasting window first.', [
         {
           text: 'OK',
@@ -67,11 +78,6 @@ const TimerSection = ({
     stopwatchTimerRef.current?.reset();
   };
 
-  const handleTimeElapsed = () => {
-    console.log('timeElapsed', stopwatchTimerRef.current?.getSnapshot());
-    stopwatchTimerRef.current?.getSnapshot();
-  };
-
   const storage = new MMKV();
   const cachedFastValue = storage.getNumber('fastingWindow');
 
@@ -84,19 +90,19 @@ const TimerSection = ({
           <Text style={styles?.title}>It's eating time</Text>
         )}
         <Button style={styles.button} onPress={handleOpenSheet}>
-          {cachedFastValue === 12 ? (
+          {fastingWindow == 12 ? (
             <Text style={styles.buttonText}>12:12 fasting</Text>
-          ) : cachedFastValue === 14 ? (
+          ) : fastingWindow == 14 ? (
             <Text style={styles.buttonText}>14:10 fasting</Text>
-          ) : cachedFastValue === 16 ? (
+          ) : fastingWindow == 16 ? (
             <Text style={styles.buttonText}>16:8 fasting</Text>
-          ) : cachedFastValue === 18 ? (
+          ) : fastingWindow == 18 ? (
             <Text style={styles.buttonText}>18:6 fasting</Text>
-          ) : cachedFastValue === 20 ? (
+          ) : fastingWindow == 20 ? (
             <Text style={styles.buttonText}>20:4 fasting</Text>
-          ) : cachedFastValue === 22 ? (
+          ) : fastingWindow == 22 ? (
             <Text style={styles.buttonText}>22:2 fasting</Text>
-          ) : cachedFastValue === 24 ? (
+          ) : fastingWindow == 24 ? (
             <Text style={styles.buttonText}>24h fasting</Text>
           ) : (
             <Text style={styles.buttonText}>Choose fasting window</Text>
@@ -142,7 +148,7 @@ const TimerSection = ({
             backgroundColor="#D00D00"
           />
         </View>
-        {startTimer && cachedFastValue ? (
+        {startTimer && fastingWindow > 0 ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
@@ -152,7 +158,7 @@ const TimerSection = ({
             <Text style={[styles.buttonText, {color: '#FFF'}]}>End fast</Text>
           </Button>
         ) : null}
-        {cachedFastValue && !startTimer ? (
+        {fastingWindow > 0 && startTimer == false ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
@@ -164,18 +170,17 @@ const TimerSection = ({
             </Text>
           </Button>
         ) : null}
-        {cachedFastValue === undefined ? (
+        {fastingWindow == 0 ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
-              setStartTimer(true);
               handlePlay();
             }}>
             <Text style={[styles.buttonText, {color: '#FFF'}]}>Start fast</Text>
           </Button>
         ) : null}
       </View>
-      {startTimer ? (
+      {startTimer && cachedFastValue ? (
         <View style={styles.detailContainer}>
           <View style={styles.detailSection}>
             <Text style={styles.detailText}>Fast started</Text>
