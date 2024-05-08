@@ -1,45 +1,48 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import React, {useState, useMemo} from 'react';
 import {styles} from './styles';
 import RadioGroup from 'react-native-radio-buttons-group';
+import {MMKV} from 'react-native-mmkv';
 
-const FastingPeriod = ({handleCloseSheet}) => {
+const FastingPeriod = ({handleCloseSheet, fastingWindow, setFastingWindow}) => {
   const [selectedId, setSelectedId] = useState();
+
+  const storage = new MMKV();
 
   const radioButtons = useMemo(
     () => [
       {
-        id: '1',
+        id: '12',
         label: '12 hours',
         value: '12',
       },
       {
-        id: '2',
+        id: '14',
         label: '14 hours',
         value: '14',
       },
       {
-        id: '3',
+        id: '16',
         label: '16 hours',
         value: '16',
       },
       {
-        id: '4',
+        id: '18',
         label: '18 hours',
         value: '18',
       },
       {
-        id: '5',
+        id: '20',
         label: '20 hours',
         value: '20',
       },
       {
-        id: '6',
+        id: '22',
         label: '22 hours',
         value: '22',
       },
       {
-        id: '7',
+        id: '24',
         label: '24 hours',
         value: '24',
       },
@@ -47,14 +50,31 @@ const FastingPeriod = ({handleCloseSheet}) => {
     [],
   );
 
+  const handleConfirm = () => {
+    storage.set('fastingWindow', fastingWindow);
+
+    return Alert.alert(
+      'Success',
+      `Your fasting window has been set to ${fastingWindow} hours a day`,
+      [
+        {
+          text: 'ok',
+          onPress: () => {
+            console.log('ok pressed');
+          },
+        },
+      ],
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Choose a fasting window</Text>
 
       <RadioGroup
         radioButtons={radioButtons}
-        onPress={setSelectedId}
-        selectedId={selectedId}
+        onPress={value => setFastingWindow(value)}
+        selectedId={fastingWindow}
         containerStyle={{
           flexDirection: 'column',
           alignItems: 'flex-start',
@@ -68,7 +88,12 @@ const FastingPeriod = ({handleCloseSheet}) => {
         }}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleCloseSheet}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          handleCloseSheet();
+          handleConfirm();
+        }}>
         <Text style={styles.buttonText}>Set fasting window</Text>
       </TouchableOpacity>
     </View>

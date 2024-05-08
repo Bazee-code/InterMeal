@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
     padding: 10,
-    width: windowWidth * 0.4,
+    // width: windowWidth * 0.4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

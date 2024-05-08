@@ -10,10 +10,18 @@ import StopwatchTimer, {
 } from 'react-native-animated-stopwatch-timer';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
+import {MMKV} from 'react-native-mmkv';
 
-const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
+const TimerSection = ({
+  startTimer,
+  setStartTimer,
+  handleOpenSheet,
+  fastingWindow,
+}) => {
   const stopwatchTimerRef = useRef(null);
   const navigation = useNavigation();
+
+  console.log('fastingWindow', fastingWindow);
 
   const handleConfirm = () =>
     Alert.alert('Confirm', 'Are you sure you want to end your fast?', [
@@ -37,7 +45,17 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
     ]);
 
   const handlePlay = () => {
-    stopwatchTimerRef.current?.play();
+    if (cachedFastValue === undefined) {
+      return Alert.alert('Error', 'Kindly select a fasting window first.', [
+        {
+          text: 'OK',
+          onPress: () => {
+            console.log('ok pressed');
+          },
+        },
+      ]);
+    }
+    return stopwatchTimerRef.current?.play();
   };
 
   const handlePause = () => {
@@ -54,6 +72,9 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
     stopwatchTimerRef.current?.getSnapshot();
   };
 
+  const storage = new MMKV();
+  const cachedFastValue = storage.getNumber('fastingWindow');
+
   return (
     <View>
       <View style={styles.titleContainer}>
@@ -63,7 +84,23 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
           <Text style={styles?.title}>It's eating time</Text>
         )}
         <Button style={styles.button} onPress={handleOpenSheet}>
-          <Text style={styles.buttonText}>16:8 fasting</Text>
+          {cachedFastValue === 12 ? (
+            <Text style={styles.buttonText}>12:12 fasting</Text>
+          ) : cachedFastValue === 14 ? (
+            <Text style={styles.buttonText}>14:10 fasting</Text>
+          ) : cachedFastValue === 16 ? (
+            <Text style={styles.buttonText}>16:8 fasting</Text>
+          ) : cachedFastValue === 18 ? (
+            <Text style={styles.buttonText}>18:6 fasting</Text>
+          ) : cachedFastValue === 20 ? (
+            <Text style={styles.buttonText}>20:4 fasting</Text>
+          ) : cachedFastValue === 22 ? (
+            <Text style={styles.buttonText}>22:2 fasting</Text>
+          ) : cachedFastValue === 24 ? (
+            <Text style={styles.buttonText}>24h fasting</Text>
+          ) : (
+            <Text style={styles.buttonText}>Choose fasting window</Text>
+          )}
           <Icon name="edit" color="#F97C00" size={18} />
         </Button>
         <View style={{marginTop: 20}}>
@@ -105,7 +142,7 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
             backgroundColor="#D00D00"
           />
         </View>
-        {startTimer ? (
+        {startTimer && cachedFastValue ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
@@ -114,7 +151,8 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
             }}>
             <Text style={[styles.buttonText, {color: '#FFF'}]}>End fast</Text>
           </Button>
-        ) : (
+        ) : null}
+        {cachedFastValue && !startTimer ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
@@ -122,10 +160,20 @@ const TimerSection = ({startTimer, setStartTimer, handleOpenSheet}) => {
               handlePlay();
             }}>
             <Text style={[styles.buttonText, {color: '#FFF'}]}>
-              Start 16h fast
+              {`Start ${fastingWindow}h fast`}
             </Text>
           </Button>
-        )}
+        ) : null}
+        {cachedFastValue === undefined ? (
+          <Button
+            style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
+            onPress={() => {
+              setStartTimer(true);
+              handlePlay();
+            }}>
+            <Text style={[styles.buttonText, {color: '#FFF'}]}>Start fast</Text>
+          </Button>
+        ) : null}
       </View>
       {startTimer ? (
         <View style={styles.detailContainer}>

@@ -12,6 +12,7 @@ import FastingPeriod from './FastingPeriod';
 
 const TimerScreen = () => {
   const [startTimer, setStartTimer] = useState(false);
+  const [fastingWindow, setFastingWindow] = useState(0);
 
   const bottomSheetRef = useRef(null);
 
@@ -34,7 +35,7 @@ const TimerScreen = () => {
   const hours = now.getHours();
   const minutes = now.getMinutes();
 
-  console.log(`Today is day ${day} and the time is ${hours}:${minutes}.`);
+  // console.log(`Today is day ${day} and the time is ${hours}:${minutes}.`);
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -46,6 +47,7 @@ const TimerScreen = () => {
             startTimer={startTimer}
             setStartTimer={setStartTimer}
             handleOpenSheet={handleOpenSheet}
+            fastingWindow={fastingWindow}
           />
           <TipsSection startTimer={startTimer} setStartTimer={setStartTimer} />
           <View style={{marginBottom: 30}} />
@@ -62,7 +64,11 @@ const TimerScreen = () => {
                 backgroundColor: '#fb9f9f',
               }}>
               <BottomSheetView style={styles.contentContainer}>
-                <FastingPeriod handleCloseSheet={handleCloseSheet} />
+                <FastingPeriod
+                  handleCloseSheet={handleCloseSheet}
+                  fastingWindow={fastingWindow}
+                  setFastingWindow={setFastingWindow}
+                />
               </BottomSheetView>
             </BottomSheetModal>
           </View>
