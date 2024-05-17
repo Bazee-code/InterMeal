@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   title: {
     color: '#191919',
     fontSize: 30,
-    marginTop: 50,
+    marginTop: 100,
     fontWeight: '700',
   },
   subTitle: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F97C00',
-    marginTop: 60,
+    marginTop: 30,
     borderRadius: 15,
   },
 });

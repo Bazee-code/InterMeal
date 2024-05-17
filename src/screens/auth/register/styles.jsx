@@ -19,9 +19,6 @@ export const styles = StyleSheet.create({
     marginTop: 5,
   },
   checkBoxContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginVertical: 40,
   },
   checkBox: {

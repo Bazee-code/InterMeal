@@ -5,21 +5,28 @@ import Input from '../../../components/Input';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Icon2 from 'react-native-vector-icons/Feather';
 import {Checkbox, TextInput} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import * as Routes from '../../../navigation/routes';
 
 const LoginScreen = () => {
+  const navigation = useNavigation();
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
 
+  const handleRegister = () => {
+    navigation.navigate(Routes.REGISTER_SCREEN);
+  };
+
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
       <View style={styles.container}>
-        <Text style={styles.title}>Join InterMeals Today</Text>
+        <Text style={styles.title}>Login to your account</Text>
         <Text style={styles.subTitle}>
-          Join now & take control of your health.
+          Continue taking control of your health.
         </Text>
-        <View style={{marginTop: 80}}>
+        <View style={{marginTop: 30}}>
           <Input text={userName} setText={setUserName} label={'Username'} />
           {/* <Input
             text={email}
@@ -64,9 +71,10 @@ const LoginScreen = () => {
         <Text
           style={[
             styles.subTitle,
-            {fontWeight: '600', marginTop: 20, textDecorationLine: 'underline'},
-          ]}>
-          Already have an account ?
+            {fontWeight: '600', marginTop: 30, textDecorationLine: 'underline'},
+          ]}
+          onPress={handleRegister}>
+          Don't have an account ?
         </Text>
       </View>
     </SafeAreaView>

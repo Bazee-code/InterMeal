@@ -81,6 +81,8 @@ const TimerSection = ({
   const storage = new MMKV();
   const cachedFastValue = storage.getNumber('fastingWindow');
 
+  console.log('handleTimeElapsed', handleTimeElapsed());
+
   return (
     <View>
       <View style={styles.titleContainer}>

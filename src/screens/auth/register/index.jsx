@@ -5,12 +5,20 @@ import Input from '../../../components/Input';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Icon2 from 'react-native-vector-icons/Feather';
 import {Checkbox, TextInput} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import * as Routes from '../../../navigation/routes';
 
 const RegisterScreen = () => {
+  const navigation = useNavigation();
+
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
+
+  const handleLogin = () => {
+    navigation.navigate(Routes.LOGIN_SCREEN);
+  };
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -46,15 +54,10 @@ const RegisterScreen = () => {
               uncheckedColor={'#000'}
             />
             <Text style={[styles.subTitle, {fontWeight: '500'}]}>
-              Remember me
+              I agree to InterMeals{' '}
+              <Text style={{fontWeight: '700'}}>Terms & Conditions</Text>
             </Text>
           </View>
-          <TouchableOpacity>
-            <Text
-              style={[styles.subTitle, {fontWeight: '600', marginRight: 3}]}>
-              Forgot Password
-            </Text>
-          </TouchableOpacity>
         </View>
         <View>
           <TouchableOpacity style={styles.button}>
@@ -65,7 +68,8 @@ const RegisterScreen = () => {
           style={[
             styles.subTitle,
             {fontWeight: '600', marginTop: 20, textDecorationLine: 'underline'},
-          ]}>
+          ]}
+          onPress={handleLogin}>
           Already have an account ?
         </Text>
       </View>

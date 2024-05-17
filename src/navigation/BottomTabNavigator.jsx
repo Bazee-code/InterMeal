@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as Routes from './routes';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -7,13 +7,14 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   DashboardScreenStack,
   InsightsScreenStack,
+  LoginScreenStack,
   ProfileScreenStack,
   TimerScreenStack,
 } from './StackNavigator';
 
 const BottomTab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
+const RenderBottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
       backBehavior="history"
@@ -69,6 +70,11 @@ const BottomTabNavigator = () => {
       />
     </BottomTab.Navigator>
   );
+};
+
+const BottomTabNavigator = () => {
+  const [isAuth, setIsAuth] = useState(false);
+  return isAuth ? <RenderBottomTabNavigator /> : <LoginScreenStack />;
 };
 
 export default BottomTabNavigator;
