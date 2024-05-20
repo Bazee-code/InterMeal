@@ -3,7 +3,7 @@ import React from 'react';
 import {TextInput} from 'react-native-paper';
 import {styles} from './styles';
 
-const Input = ({text, setText, label, left, right}) => {
+const Input = ({text, setText, label, left, right, onBlur, onChange}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -12,8 +12,9 @@ const Input = ({text, setText, label, left, right}) => {
         left={left}
         right={right}
         value={text}
-        onChangeText={text => setText(text)}
+        onChangeText={onChange}
         style={styles.input}
+        onBlur={onBlur}
       />
     </View>
   );

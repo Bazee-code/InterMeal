@@ -37,4 +37,5 @@ export const styles = StyleSheet.create({
     marginTop: 30,
     borderRadius: 15,
   },
+  errorText: {fontSize: 13, color: 'red', textAlign: 'center', marginTop: 5},
 });

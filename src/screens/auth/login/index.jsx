@@ -7,17 +7,30 @@ import Icon2 from 'react-native-vector-icons/Feather';
 import {Checkbox, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
+import {Controller, useForm} from 'react-hook-form';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
   const [checked, setChecked] = useState(false);
 
   const handleRegister = () => {
     navigation.navigate(Routes.REGISTER_SCREEN);
   };
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      userName: '',
+      // email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = data => console.log('login data', data);
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -27,20 +40,55 @@ const LoginScreen = () => {
           Continue taking control of your health.
         </Text>
         <View style={{marginTop: 30}}>
-          <Input text={userName} setText={setUserName} label={'Username'} />
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                label={'Username'}
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+              />
+            )}
+            name="userName"
+          />
+          {errors.userName && (
+            <Text style={styles.errorText}>Username is required.</Text>
+          )}
+
           {/* <Input
             text={email}
             setText={setEmail}
             label={'Email'}
             left={<TextInput.Icon icon="email" size={18} color={'#fb9f9f'} />}
           /> */}
-          <Input
-            text={password}
-            setText={setPassword}
-            label={'Password'}
-            left={<TextInput.Icon icon="lock" size={18} color={'#fb9f9f'} />}
-            right={<TextInput.Icon icon="eye" size={18} color={'#fb9f9f'} />}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Input
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+                label={'Password'}
+                left={
+                  <TextInput.Icon icon="lock" size={18} color={'#fb9f9f'} />
+                }
+                right={
+                  <TextInput.Icon icon="eye" size={18} color={'#fb9f9f'} />
+                }
+              />
+            )}
+            name="password"
           />
+          {errors.password && (
+            <Text style={styles.errorText}>Password is required.</Text>
+          )}
         </View>
         <View style={styles.checkBoxContainer}>
           <View style={styles.checkBox}>
@@ -64,7 +112,9 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
         <View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}>
             <Text style={[styles.subTitle, {fontWeight: '500'}]}>Sign up</Text>
           </TouchableOpacity>
         </View>
