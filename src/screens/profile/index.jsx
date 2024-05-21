@@ -4,8 +4,10 @@ import HeaderSection from './HeaderSection';
 import HistorySection from './HistorySection';
 import {windowHeight} from '../../utils';
 import LegalSection from './LegalSection';
+import {useSelector} from 'react-redux';
 
 const ProfileScreen = () => {
+  const {} = useSelector(state => state.auth);
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
       <View

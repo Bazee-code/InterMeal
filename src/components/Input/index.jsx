@@ -15,6 +15,7 @@ const Input = ({text, setText, label, left, right, onBlur, onChange}) => {
         onChangeText={onChange}
         style={styles.input}
         onBlur={onBlur}
+        autoCapitalize="none"
       />
     </View>
   );
