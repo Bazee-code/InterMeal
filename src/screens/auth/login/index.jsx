@@ -1,4 +1,11 @@
-import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './styles';
 import Input from '../../../components/Input';
@@ -8,29 +15,52 @@ import {Checkbox, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
 import {Controller, useForm} from 'react-hook-form';
+import {useLoginMutation} from '../../../redux/services/auth/authActions';
+import {useDispatch, useSelector} from 'react-redux';
+import {setAuthStatus, setUser} from '../../../redux/services/auth/authSlice';
+import * as Keychain from 'react-native-keychain';
 
 const LoginScreen = () => {
-  const navigation = useNavigation();
-
-  const [checked, setChecked] = useState(false);
-
-  const handleRegister = () => {
-    navigation.navigate(Routes.REGISTER_SCREEN);
-  };
-
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm({
     defaultValues: {
-      userName: '',
-      // email: '',
+      email: '',
       password: '',
     },
   });
+  const navigation = useNavigation();
 
-  const onSubmit = data => console.log('login data', data);
+  const [checked, setChecked] = useState(false);
+  const dispatch = useDispatch();
+
+  const [login, {isLoading}] = useLoginMutation();
+
+  const handleLogin = async data => {
+    const loginData = await login(data).unwrap();
+
+    console.log('loginData', loginData);
+    if (loginData?.success === 'success') {
+      dispatch(setUser({...loginData}));
+      dispatch(setAuthStatus(true));
+      await Keychain.setGenericPassword('session', loginData?.session);
+    } else if (loginData?.message) {
+      Alert.alert('Error', `${loginData?.message}`, [
+        {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
+      ]);
+    } else {
+      Alert.alert(
+        'Error',
+        'Kindly check the email or password and try again.',
+        [{text: 'OK', onPress: () => dispatch(setAuthStatus(false))}],
+      );
+    }
+  };
+  const handleRegister = () => {
+    navigation.navigate(Routes.REGISTER_SCREEN);
+  };
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -47,28 +77,29 @@ const LoginScreen = () => {
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
-                label={'Username'}
+                label={'Email'}
                 onBlur={onBlur}
                 onChange={onChange}
                 value={value}
+                left={
+                  <TextInput.Icon icon="email" size={18} color={'#fb9f9f'} />
+                }
               />
             )}
-            name="userName"
+            name="email"
           />
-          {errors.userName && (
-            <Text style={styles.errorText}>Username is required.</Text>
+          {errors.email && (
+            <Text style={styles.errorText}>Email is required.</Text>
           )}
 
-          {/* <Input
-            text={email}
-            setText={setEmail}
-            label={'Email'}
-            left={<TextInput.Icon icon="email" size={18} color={'#fb9f9f'} />}
-          /> */}
           <Controller
             control={control}
             rules={{
               required: true,
+              // minLength: {
+              //   value: 6,
+              //   message: 'Password should be at least 6 characters',
+              // },
             }}
             render={({field: {onChange, onBlur, value}}) => (
               <Input
@@ -114,8 +145,11 @@ const LoginScreen = () => {
         <View>
           <TouchableOpacity
             style={styles.button}
-            onPress={handleSubmit(onSubmit)}>
-            <Text style={[styles.subTitle, {fontWeight: '500'}]}>Sign up</Text>
+            onPress={handleSubmit(handleLogin)}>
+            <Text style={[styles.subTitle, {fontWeight: '500'}]}>Sign in</Text>
+            {isLoading && (
+              <ActivityIndicator color={'#191919'} style={{marginLeft: 3}} />
+            )}
           </TouchableOpacity>
         </View>
         <Text
