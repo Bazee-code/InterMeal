@@ -1,4 +1,11 @@
-import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './styles';
 import Input from '../../../components/Input';
@@ -8,6 +15,8 @@ import {Checkbox, TextInput} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
 import {Controller, useForm} from 'react-hook-form';
+import {useDispatch} from 'react-redux';
+import {useRegisterMutation} from '../../../redux/services/auth/authActions';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -15,7 +24,7 @@ const RegisterScreen = () => {
   const [checked, setChecked] = useState(false);
 
   const handleLogin = () => {
-    navigation.navigate(Routes.LOGIN_SCREEN);
+    navigation.replace(Routes.LOGIN_SCREEN);
   };
 
   const {
@@ -24,13 +33,30 @@ const RegisterScreen = () => {
     formState: {errors},
   } = useForm({
     defaultValues: {
-      userName: '',
+      username: '',
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = data => console.log('register data', data);
+  const dispatch = useDispatch();
+
+  const [register, {isLoading}] = useRegisterMutation();
+
+  const handleRegister = async data => {
+    const registerData = await register(data).unwrap();
+
+    console.log('registerData', registerData);
+    if (registerData?.success === 'success') {
+      return Alert.alert('Success', 'User created successfully', [
+        {text: 'Login', onPress: () => handleLogin()},
+      ]);
+    } else {
+      return Alert.alert('Error', `${registerData?.message}`, [
+        {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
+      ]);
+    }
+  };
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -54,7 +80,7 @@ const RegisterScreen = () => {
                 value={value}
               />
             )}
-            name="userName"
+            name="username"
           />
 
           {errors.userName && (
@@ -129,8 +155,11 @@ const RegisterScreen = () => {
         <View>
           <TouchableOpacity
             style={styles.button}
-            onPress={handleSubmit(onSubmit)}>
+            onPress={handleSubmit(handleRegister)}>
             <Text style={[styles.subTitle, {fontWeight: '500'}]}>Sign up</Text>
+            {isLoading && (
+              <ActivityIndicator color={'#191919'} style={{marginLeft: 3}} />
+            )}
           </TouchableOpacity>
         </View>
         <Text
