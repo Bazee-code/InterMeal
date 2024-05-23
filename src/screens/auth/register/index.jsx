@@ -22,6 +22,7 @@ const RegisterScreen = () => {
   const navigation = useNavigation();
 
   const [checked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
     navigation.replace(Routes.LOGIN_SCREEN);
@@ -44,18 +45,24 @@ const RegisterScreen = () => {
   const [register, {isLoading}] = useRegisterMutation();
 
   const handleRegister = async data => {
-    const registerData = await register(data).unwrap();
-
-    console.log('registerData', registerData);
-    if (registerData?.success === 'success') {
-      return Alert.alert('Success', 'User created successfully', [
-        {text: 'Login', onPress: () => handleLogin()},
-      ]);
-    } else {
-      return Alert.alert('Error', `${registerData?.message}`, [
-        {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
-      ]);
-    }
+    const registerData = register(data)
+      .unwrap()
+      .then(registerData => {
+        if (registerData?.success === 'success') {
+          return Alert.alert('Success', 'User created successfully', [
+            {text: 'Login', onPress: () => handleLogin()},
+          ]);
+        }
+      })
+      .catch(e => {
+        Alert.alert('Error', `${e?.data?.msg}`, [
+          {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
+        ]);
+      });
+    return registerData;
+  };
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -83,7 +90,7 @@ const RegisterScreen = () => {
             name="username"
           />
 
-          {errors.userName && (
+          {errors.username && (
             <Text style={styles.errorText}>Username is required.</Text>
           )}
 
@@ -124,8 +131,23 @@ const RegisterScreen = () => {
                 left={
                   <TextInput.Icon icon="lock" size={18} color={'#fb9f9f'} />
                 }
+                showPassword={showPassword}
                 right={
-                  <TextInput.Icon icon="eye" size={18} color={'#fb9f9f'} />
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      size={18}
+                      color={'#fb9f9f'}
+                      onPress={handleShowPassword}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      size={18}
+                      color={'#fb9f9f'}
+                      onPress={handleShowPassword}
+                    />
+                  )
                 }
               />
             )}

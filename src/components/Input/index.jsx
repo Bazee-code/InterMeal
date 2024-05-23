@@ -3,7 +3,16 @@ import React from 'react';
 import {TextInput} from 'react-native-paper';
 import {styles} from './styles';
 
-const Input = ({text, setText, label, left, right, onBlur, onChange}) => {
+const Input = ({
+  text,
+  setText,
+  label,
+  left,
+  right,
+  onBlur,
+  onChange,
+  showPassword,
+}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -16,6 +25,7 @@ const Input = ({text, setText, label, left, right, onBlur, onChange}) => {
         style={styles.input}
         onBlur={onBlur}
         autoCapitalize="none"
+        secureTextEntry={showPassword}
       />
     </View>
   );

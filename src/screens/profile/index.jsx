@@ -4,15 +4,17 @@ import HeaderSection from './HeaderSection';
 import HistorySection from './HistorySection';
 import {windowHeight} from '../../utils';
 import LegalSection from './LegalSection';
-import {useSelector} from 'react-redux';
+import {useUserDetailsQuery} from '../../redux/services/user/userActions';
 
 const ProfileScreen = () => {
-  const {} = useSelector(state => state.auth);
+  const {data, isLoading} = useUserDetailsQuery();
+  console.log('data', data);
+
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
       <View
         style={{backgroundColor: '#fb9f9f', margin: 10, height: windowHeight}}>
-        <HeaderSection />
+        <HeaderSection data={data} />
         <HistorySection />
         <LegalSection />
       </View>

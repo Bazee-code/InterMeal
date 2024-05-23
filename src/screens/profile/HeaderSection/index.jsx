@@ -3,7 +3,7 @@ import React from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/Entypo';
 
-const HeaderSection = () => {
+const HeaderSection = ({data}) => {
   return (
     <View>
       <View style={styles.container}>
@@ -17,7 +17,7 @@ const HeaderSection = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>Eugene Obare</Text>
+          <Text style={styles.title}>{data?.user?.userInfo?.name}</Text>
           <Text style={styles.subTitle}>You have lost 5 kgs</Text>
         </View>
       </View>

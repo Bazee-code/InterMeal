@@ -8,11 +8,12 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: async (headers, {endpoint}) => {
     try {
       const credentials = await Keychain.getGenericPassword();
+      console.log('creds api', credentials);
       if (credentials) {
-        headers.set('Authorization', `Bearer ${credentials?.session}`);
+        headers.set('Authorization', `Bearer ${credentials?.password}`);
       } else {
         console.log('no credentials stored');
-        headers.set('Authorization', `Bearer ${credentials?.session}`);
+        headers.set('Authorization', `Bearer ${credentials?.password}`);
       }
     } catch (e) {
       console.log('keychain not accessible', e);

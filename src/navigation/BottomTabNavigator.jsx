@@ -77,13 +77,13 @@ const RenderBottomTabNavigator = () => {
 
 const BottomTabNavigator = () => {
   const {authStatus} = useSelector(state => state.auth);
-  console.log('authStatus', authStatus);
+  // console.log('authStatus', authStatus);
   const dispatch = useDispatch();
 
   const handleAuthStatus = async () => {
     try {
       const credentials = await Keychain.getGenericPassword();
-      console.log('credentials nav', credentials);
+      // console.log('credentials nav', credentials);
       if (credentials) {
         dispatch(setAuthStatus(true));
       } else {

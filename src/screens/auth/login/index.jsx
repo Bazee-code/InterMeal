@@ -34,32 +34,35 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   const [checked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
   const [login, {isLoading}] = useLoginMutation();
 
   const handleLogin = async data => {
-    const loginData = await login(data).unwrap();
+    const loginData = login(data)
+      .unwrap()
+      .then(loginData => {
+        if (loginData?.success === 'success') {
+          dispatch(setUser({...loginData}));
+          dispatch(setAuthStatus(true));
+          Keychain.setGenericPassword('session', loginData?.accessToken);
+        }
+      })
+      .catch(e => {
+        Alert.alert('Error', `${e?.data?.msg}`, [
+          {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
+        ]);
+      });
 
-    console.log('loginData', loginData);
-    if (loginData?.success === 'success') {
-      dispatch(setUser({...loginData}));
-      dispatch(setAuthStatus(true));
-      await Keychain.setGenericPassword('session', loginData?.session);
-    } else if (loginData?.message) {
-      Alert.alert('Error', `${loginData?.message}`, [
-        {text: 'OK', onPress: () => dispatch(setAuthStatus(false))},
-      ]);
-    } else {
-      Alert.alert(
-        'Error',
-        'Kindly check the email or password and try again.',
-        [{text: 'OK', onPress: () => dispatch(setAuthStatus(false))}],
-      );
-    }
+    return loginData;
   };
   const handleRegister = () => {
     navigation.navigate(Routes.REGISTER_SCREEN);
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -107,11 +110,26 @@ const LoginScreen = () => {
                 onChange={onChange}
                 value={value}
                 label={'Password'}
+                showPassword={showPassword}
                 left={
                   <TextInput.Icon icon="lock" size={18} color={'#fb9f9f'} />
                 }
                 right={
-                  <TextInput.Icon icon="eye" size={18} color={'#fb9f9f'} />
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      size={18}
+                      color={'#fb9f9f'}
+                      onPress={handleShowPassword}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      size={18}
+                      color={'#fb9f9f'}
+                      onPress={handleShowPassword}
+                    />
+                  )
                 }
               />
             )}
