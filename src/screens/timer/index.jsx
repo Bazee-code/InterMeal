@@ -9,9 +9,15 @@ import {
 import TimerSection from './TimerSection';
 import TipsSection from './TipsSection';
 import FastingPeriod from './FastingPeriod';
+import {MMKV} from 'react-native-mmkv';
+
+const storage = new MMKV();
 
 const TimerScreen = () => {
   const [startTimer, setStartTimer] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
   const [fastingWindow, setFastingWindow] = useState(0);
 
   const bottomSheetRef = useRef(null);
@@ -30,12 +36,7 @@ const TimerScreen = () => {
     return bottomSheetRef.current?.close();
   }, []);
 
-  const now = new Date();
-  const day = now.getDay();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-
-  // console.log(`Today is day ${day} and the time is ${hours}:${minutes}.`);
+  const storedFastWindow = storage.getString('fastingWindow');
 
   return (
     <SafeAreaView style={{backgroundColor: '#fb9f9f'}}>
@@ -48,6 +49,12 @@ const TimerScreen = () => {
             setStartTimer={setStartTimer}
             handleOpenSheet={handleOpenSheet}
             fastingWindow={fastingWindow}
+            storedFastWindow={storedFastWindow}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            storage={storage}
           />
           <TipsSection startTimer={startTimer} setStartTimer={setStartTimer} />
           <View style={{marginBottom: 30}} />

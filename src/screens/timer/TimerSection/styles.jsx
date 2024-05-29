@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
   timerContainer: {
     position: 'absolute',
     top: '43%',
-    left: '15%',
+    left: '30%',
   },
   eatingContainer: {
     position: 'absolute',

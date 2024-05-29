@@ -1,4 +1,11 @@
-import {View, Text, SafeAreaView, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -6,18 +13,41 @@ import Icon2 from 'react-native-vector-icons/Entypo';
 import Timer from '../../../components/Timer';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
+import {useSelector} from 'react-redux';
+import {useAddFastingTimeMutation} from '../../../redux/services/fastingtime/fastingActions';
 
 const CompleteSection = () => {
   const navigation = useNavigation();
-  const handleSave = () =>
-    Alert.alert('Saved', 'Your progress was saved', [
-      {
-        text: 'OK',
-        onPress: () => {
-          navigation.push(Routes.TIMER_SCREEN);
-        },
-      },
-    ]);
+
+  const {startTime, endTime, timeElapsed} = useSelector(state => state?.auth);
+
+  const [addFastingTime, {isLoading}] = useAddFastingTimeMutation();
+
+  const formattedDuration = timeElapsed?.split(' ')[0];
+
+  const handleConfirm = () => {
+    const data = {
+      starttime: startTime,
+      endtime: endTime,
+      duration: parseInt(formattedDuration),
+    };
+    const fastingTime = addFastingTime(data)
+      .unwrap()
+      .then(data => {
+        if (data?.success === 'success') {
+          Alert.alert('Saved', 'Your progress was saved', [
+            {text: 'OK', onPress: () => navigation.push(Routes.TIMER_SCREEN)},
+          ]);
+        }
+      })
+      .catch(e =>
+        Alert.alert('Error', `${e?.data?.msg}`, [
+          {text: 'OK', onPress: () => console.log('ok pressed')},
+        ]),
+      );
+
+    return fastingTime;
+  };
 
   const handleDelete = () =>
     Alert.alert('Confirm', 'Are you sure you want to delete your session?', [
@@ -42,16 +72,16 @@ const CompleteSection = () => {
           <Timer />
         </View>
         <Text style={styles.title}>Well done!</Text>
-        <Text style={styles.title}>You fasted for 18h 30min</Text>
+        <Text style={styles.title}>You fasted for {timeElapsed}</Text>
 
         <View style={styles.detailContainer}>
           <View style={styles.detailSection}>
             <Text style={styles.detailText}>Fast started</Text>
-            <Text style={styles.buttonText}>Yesterday,8:00pm</Text>
+            <Text style={styles.buttonText}>{startTime}</Text>
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.detailText}>Fast ended</Text>
-            <Text style={styles.buttonText}>Today,8:00pm</Text>
+            <Text style={styles.buttonText}>{endTime}</Text>
           </View>
         </View>
 
@@ -90,8 +120,9 @@ const CompleteSection = () => {
               styles.footerButton,
               {marginLeft: 20, backgroundColor: '#191919'},
             ]}
-            onPress={handleSave}>
+            onPress={handleConfirm}>
             <Text style={[styles.buttonText, {color: '#FFF'}]}>Save</Text>
+            {isLoading && <ActivityIndicator color={'#FFF'} size={'small'} />}
           </TouchableOpacity>
         </View>
       </View>

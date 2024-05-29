@@ -10,16 +10,31 @@ import StopwatchTimer, {
 } from 'react-native-animated-stopwatch-timer';
 import {useNavigation} from '@react-navigation/native';
 import * as Routes from '../../../navigation/routes';
-import {MMKV} from 'react-native-mmkv';
+import {useDispatch} from 'react-redux';
+import {
+  setEndTime,
+  setStartTime,
+  setTimeElapsed,
+} from '../../../redux/services/auth/authSlice';
 
 const TimerSection = ({
   startTimer,
   setStartTimer,
   handleOpenSheet,
-  fastingWindow,
+  storedFastWindow,
+  storage,
 }) => {
   const stopwatchTimerRef = useRef(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const today = new Date().toLocaleString(undefined, {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   const handleTimeElapsed = () => {
     const ms = stopwatchTimerRef.current?.getSnapshot();
@@ -47,16 +62,17 @@ const TimerSection = ({
       {
         text: 'Yes',
         onPress: () => {
-          handleTimeElapsed();
+          dispatch(setEndTime(today));
+          dispatch(setTimeElapsed(handleTimeElapsed()));
           handleReset();
           setStartTimer(false);
-          navigation.push(Routes.SUCCESS_SCREEN, {item: handleTimeElapsed()});
+          navigation.push(Routes.SUCCESS_SCREEN);
         },
       },
     ]);
 
   const handlePlay = () => {
-    if (fastingWindow == 0) {
+    if (storedFastWindow == 0) {
       return Alert.alert('Error', 'Kindly select a fasting window first.', [
         {
           text: 'OK',
@@ -78,11 +94,6 @@ const TimerSection = ({
     stopwatchTimerRef.current?.reset();
   };
 
-  const storage = new MMKV();
-  const cachedFastValue = storage.getNumber('fastingWindow');
-
-  console.log('handleTimeElapsed', handleTimeElapsed());
-
   return (
     <View>
       <View style={styles.titleContainer}>
@@ -92,19 +103,19 @@ const TimerSection = ({
           <Text style={styles?.title}>It's eating time</Text>
         )}
         <Button style={styles.button} onPress={handleOpenSheet}>
-          {fastingWindow == 12 ? (
+          {storedFastWindow == 12 ? (
             <Text style={styles.buttonText}>12:12 fasting</Text>
-          ) : fastingWindow == 14 ? (
+          ) : storedFastWindow == 14 ? (
             <Text style={styles.buttonText}>14:10 fasting</Text>
-          ) : fastingWindow == 16 ? (
+          ) : storedFastWindow == 16 ? (
             <Text style={styles.buttonText}>16:8 fasting</Text>
-          ) : fastingWindow == 18 ? (
+          ) : storedFastWindow == 18 ? (
             <Text style={styles.buttonText}>18:6 fasting</Text>
-          ) : fastingWindow == 20 ? (
+          ) : storedFastWindow == 20 ? (
             <Text style={styles.buttonText}>20:4 fasting</Text>
-          ) : fastingWindow == 22 ? (
+          ) : storedFastWindow == 22 ? (
             <Text style={styles.buttonText}>22:2 fasting</Text>
-          ) : fastingWindow == 24 ? (
+          ) : storedFastWindow == 24 ? (
             <Text style={styles.buttonText}>24h fasting</Text>
           ) : (
             <Text style={styles.buttonText}>Choose fasting window</Text>
@@ -115,9 +126,8 @@ const TimerSection = ({
           <StopwatchTimer
             ref={stopwatchTimerRef}
             mode="stopwatch"
-            trailingZeros={2}
+            trailingZeros={0}
             containerStyle={styles.timerContainer}
-            leadingZeros={2}
             enterAnimationType="slide-in-down"
             textCharStyle={[styles.title, {fontSize: 30, margin: 5}]}
             decimalSeparator=":"
@@ -150,29 +160,34 @@ const TimerSection = ({
             backgroundColor="#D00D00"
           />
         </View>
-        {startTimer && fastingWindow > 0 ? (
+        {startTimer && storedFastWindow > 0 ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
               setStartTimer(false);
               handlePause();
+              // storage.set('endTime', endTime);
             }}>
-            <Text style={[styles.buttonText, {color: '#FFF'}]}>End fast</Text>
+            <Text style={[styles.buttonText, {color: '#FFF'}]}>
+              {`End ${storedFastWindow}h fast`}
+            </Text>
           </Button>
         ) : null}
-        {fastingWindow > 0 && startTimer == false ? (
+        {storedFastWindow > 0 && startTimer == false ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
               setStartTimer(true);
               handlePlay();
+              dispatch(setStartTime(today));
+              // storage.set('startTime', startTime);
             }}>
             <Text style={[styles.buttonText, {color: '#FFF'}]}>
-              {`Start ${fastingWindow}h fast`}
+              {`Start ${storedFastWindow}h fast`}
             </Text>
           </Button>
         ) : null}
-        {fastingWindow == 0 ? (
+        {storedFastWindow == 0 ? (
           <Button
             style={[styles.button, {marginTop: 20, backgroundColor: '#191919'}]}
             onPress={() => {
@@ -182,18 +197,18 @@ const TimerSection = ({
           </Button>
         ) : null}
       </View>
-      {startTimer && cachedFastValue ? (
+      {/* {startTimer && storedFastWindow ? (
         <View style={styles.detailContainer}>
           <View style={styles.detailSection}>
             <Text style={styles.detailText}>Fast started</Text>
-            <Text style={styles.buttonText}>Yesterday,8:00pm</Text>
+            <Text style={styles.buttonText}>{startTime}</Text>
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.detailText}>Fast ended</Text>
-            <Text style={styles.buttonText}>Today,8:00pm</Text>
+            <Text style={styles.buttonText}>{endTime}</Text>
           </View>
         </View>
-      ) : null}
+      ) : null} */}
     </View>
   );
 };
