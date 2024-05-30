@@ -5,11 +5,36 @@ import DashboardScreen from '../screens/dashboard';
 import InsightsScreen from '../screens/insights';
 import ProfileScreen from '../screens/profile';
 import TimerScreen from '../screens/timer';
+import CompleteSection from '../screens/timer/CompleteSection';
+import LoginScreen from '../screens/auth/login';
+import RegisterScreen from '../screens/auth/register';
 
+const LoginStack = createNativeStackNavigator();
 const DashboardStack = createNativeStackNavigator();
 const InsightsStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 const TimerStack = createNativeStackNavigator();
+
+export const LoginScreenStack = () => {
+  return (
+    <LoginStack.Navigator initialRouteName={Routes.LOGIN_SCREEN}>
+      <LoginStack.Screen
+        name={Routes.REGISTER_SCREEN}
+        component={RegisterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <LoginStack.Screen
+        name={Routes.LOGIN_SCREEN}
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </LoginStack.Navigator>
+  );
+};
 
 export const DashboardScreenStack = () => {
   return (
@@ -59,6 +84,13 @@ export const TimerScreenStack = () => {
       <TimerStack.Screen
         name={Routes.TIMER_SCREEN}
         component={TimerScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <TimerStack.Screen
+        name={Routes.SUCCESS_SCREEN}
+        component={CompleteSection}
         options={{
           headerShown: false,
         }}

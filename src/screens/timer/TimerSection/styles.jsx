@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   button: {
     backgroundColor: '#FFF',
     padding: 10,
-    width: windowWidth * 0.4,
+    // width: windowWidth * 0.4,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -50,6 +50,11 @@ export const styles = StyleSheet.create({
   timerContainer: {
     position: 'absolute',
     top: '43%',
-    left: '20%',
+    left: '30%',
+  },
+  eatingContainer: {
+    position: 'absolute',
+    top: '43%',
+    left: '17%',
   },
 });

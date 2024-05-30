@@ -1,8 +1,11 @@
 // stacks routes
+export const LOGIN_SCREEN = 'login_screen';
+export const REGISTER_SCREEN = 'register_screen';
 export const DASHBOARD_SCREEN = 'dashboard_screen';
 export const INSIGHTS_SCREEN = 'insights_screen';
 export const PROFILE_SCREEN = 'profile_screen';
 export const TIMER_SCREEN = 'timer_screen';
+export const SUCCESS_SCREEN = 'success_screen';
 
 //tabs routes
 export const DASHBOARD_TAB = 'dashboard_tab';

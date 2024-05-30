@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as Routes from './routes';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -7,13 +7,17 @@ import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   DashboardScreenStack,
   InsightsScreenStack,
+  LoginScreenStack,
   ProfileScreenStack,
   TimerScreenStack,
 } from './StackNavigator';
+import * as Keychain from 'react-native-keychain';
+import {useDispatch, useSelector} from 'react-redux';
+import {setAuthStatus} from '../redux/services/auth/authSlice';
 
 const BottomTab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
+const RenderBottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
       backBehavior="history"
@@ -69,6 +73,32 @@ const BottomTabNavigator = () => {
       />
     </BottomTab.Navigator>
   );
+};
+
+const BottomTabNavigator = () => {
+  const {authStatus} = useSelector(state => state.auth);
+  // console.log('authStatus', authStatus);
+  const dispatch = useDispatch();
+
+  const handleAuthStatus = async () => {
+    try {
+      const credentials = await Keychain.getGenericPassword();
+      // console.log('credentials nav', credentials);
+      if (credentials) {
+        dispatch(setAuthStatus(true));
+      } else {
+        dispatch(setAuthStatus(false));
+      }
+    } catch (e) {
+      dispatch(setAuthStatus(false));
+    }
+  };
+
+  useEffect(() => {
+    handleAuthStatus();
+  }, [authStatus]);
+
+  return authStatus ? <RenderBottomTabNavigator /> : <LoginScreenStack />;
 };
 
 export default BottomTabNavigator;
